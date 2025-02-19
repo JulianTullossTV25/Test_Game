@@ -1,24 +1,29 @@
 from PyUI.Window import Window
-##import the custom screens you made---
-from ExampleScreen import ExampleScreen
-##-------------------------------------
+from PyUI.PageElements import Button
+from StartScreen import StartScreen
+import pygame
 
+# Initialize Pygame
+pygame.init()
 
-window = Window("Example App", (0,255,0)) ##Create the window to work with
+window = Window("Example App", (0, 255, 0))  # Create the window to work with
 
-##Create Screen Objects for use------
-exampleScreen = ExampleScreen(window)
-##-----------------------------------
+# Create Screen Objects for use
+startScreen = StartScreen(window)
 
-screen = exampleScreen ##set screen to be the starting screen
+screen = startScreen  # Set screen to be the starting screen
 
-while True: ##Game loop
-    ##Enter code here to handle changes between screens---
+while True:  # Game loop
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            for element in screen.elements:
+                if isinstance(element, Button) and element.wasClicked(event.pos):
+                    element.onClick(screen)
 
+    window.checkForInput(screen)  # Checks for inputs on the screen
+    screen.display()  # Updates the screen
+    window.update(screen)  # Updates the window to reflect the new screen
 
-
-    ##----------------------------------------------------
-
-    window.checkForInput(screen) #checks for inputs on the screen
-    screen.update() #updates the screen
-    window.update(screen) #updates the window to reflect the new screen
